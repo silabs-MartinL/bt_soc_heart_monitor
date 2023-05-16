@@ -1,6 +1,8 @@
-# Bluetooth SoC Heart Monitor
+# Bluetooth - SoC Heart Monitor
 
-Bluetooth heart monitor for EFR32MG24 Dev Kit (BRD2601B) using SparkFun Pulse Oximeter and Heart Rate Monitor
+Bluetooth heart monitor for [Silicon Labs EFR32MG24 Dev Kit (BRD2601B)](https://www.silabs.com/development-tools/wireless/efr32xg24-dev-kit?tab=overview) using [SparkFun Pulse Oximeter and Heart Rate Monitor](https://www.sparkfun.com/products/15219)
+
+![Hardware](image/hardware.png)
 
 ## Operation
 
@@ -16,55 +18,78 @@ The buttons control the configuration of the sensor:
 * btn0: Changes pulse width
 * btn1: Changes samples per second
 
-The sensor is read every 250ms
+The sensor is read every 500ms
 
 All readings are output to serial port: 115200 baud rate, 8 data bits, no parity, 1 stop bit, no flow control
 
+Readings can be viewed in EFR Connect mobile application ([Google Play](https://play.google.com/store/apps/details?id=com.siliconlabs.bledemo), [Apple App Store](https://itunes.apple.com/us/app/silicon-labs-blue-gecko-wstk/id1030932759?mt=8)) or any app that can connect to a standard [Bluetooth Heart Rate Profile](https://www.bluetooth.com/specifications/specs/heart-rate-profile-1-0/) device
+
+![operation](C:\GitHub\silabs-MartinL\bt_soc_heart_monitor\Image\operation.png)
+
+## Binary
+
+A pre-built binary is available in the Binary folder
+
 ## Development
 
-1. SLCP > Software Components > Quality > Evaluation > Enable
-2. SLCP > Software Components > Search: `third` > Third Party Hardware Drivers > Enable Extension
-3. SLCP > Software Components > Search:  `oximeter` > MAX30101 & MAX32664 - Pulse Oximeter and Heart Rate Sensor (Sparkfun) > Install
-4. SLCP > Software Components > Search: `i2cspm` > I2CSPM > Add New Instances > Instance: `sensor` 
-   (Instance `inst0` should disappear, if the extension gets updated we should get a proper instance possibly named `qwiic` when the Oximeter is installed)
-5. SLCP > Software Components > Search: `io stream` > IO Stream USART >  Install >  Instance: `vcom`
-6. SLCP > Software Components > Search: `log` > Log > Install
-7. SLCP > Software Components > Search: `simple timer` > Simple Timer Service > Install
-8. SLCP > Software Components > Search: `simple rgb` > Install > Instance: `rgb_led0`
-9. SLCP > Software Components > Search: `simple button` > Install > Instance: `btn0` > Add New Instance: `btn1`
-10. Import `gatt_configuration.btconf` into GATT Configurator (or make the changes manually as described below) 
-11. Copy `app.c` from repo (or release) into project, compile, build and run
+These files are part of a Silicon Labs workshop, a brief set of steps that are followed in the workshop are given below:
 
-## GATT Database
+### Step 0: Project
 
-1. Device Name characteristic > Initial Value > `Heart Monitor` (adjust Value Length as required)
-2. Add Heart Rate service
-3. Heart Rate service > Advertise Service > Enable
-4. Heart Rate Control Point characteristic > Delete (Energy Expended feature is not supported)
-5. Body Sensor Location characteristic > Initial Value > `0x03` (Finger)
-6. Heart Rate Measurement characteristic > Value Length > `2`
-7. Heart Rate Measurement characteristic > Initial Value > `0x0000`
+In this step the required files are downloaded, the Third-party Hardware Drivers Extension is installed into Simplicity Studio and a template project created to use as a starting point:
 
-## Light Sensor
+1. Clone or download this repository to your local PC
+2. Clone or download the [Third-party Hardware Drivers Extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) from Github
+3. Follow the instructions in the Third-party Hardware Drivers Extension readme
+4. Connect EFR32MG24 Dev Kit board to PC
+5. From the Simplicity Studio **Launcher** perspective:
+   1. Select the EFR32MG24 Dev Kit in Debug adapters
+   2. Select **Example Projects and Demos** tab
+   3. Find **Bluetooth - SoC Empty** example and click **Create** button
 
-Uses buttons and light sensor as a dummy heart reading:
+### Step 1: Sensor
 
-* BTN0, finger present
-* BTN1, valid reading
+In this step the sensor hardware is set up without any wireless communications:
 
-To implement:
+1. In Simplicity Studio select the **Simplicity IDE** perspective
+2. Open the `.slcp` project file
+3. Select **Software Components** tab:
+   1. Search `io stream`, select **Services > IO Stream > Driver > IO Stream: EUSART**, click **Install** button, accept default `vcom` instance name
+   2. Search `log`, select **Application > Utility > Log**, click **Install** button
+   3. Check **Evaluation** in the **Quality** dropdown filter
+   4. Search `third`, select **Third Party Hardware Drivers**, click **Enable Extension**
+   5. Search `oximeter`, select **Third Party Hardware Drivers > Sensors > MAX30101 & MAX32664 Pulse Oximeter and Heart Rate Sensor (Sparkfun)**, click **Install** button
+   6. Search `i2cspm`, select **Platform > Driver > I2C > I2CSPM**, if there is an instance named `inst0`, click **Add New Instances** button, accept default `sensor` instance
+   7. Search `simple timer`, select **Application > Service > Simple Timer Service**, click **Install** button
+   8. Search `simple button`, select **Platform > Driver > Button > Simple Button**, click **Install** button, accept default `btn0` instance, click **Add New Instances** button, accept default `btn1` instance
+   9. Search `rgb`, select **Platform > Driver > LED > Simple RGB PWM LED**, click **Install** button, accept default `rgb_led0` instance
 
-1. SLCP > Software Components > Search: `light sensor` > Ambient Light Sensor > Install
-2. SLCP > Software Components > Search: `board control` > Configure > Enable Light Sensor > On
-3. app.c > comment in `#include "sl_sensor_lux.h"`
+4. Copy `Step_1_Sensor/app.c` (downloaded from Github) into project folder
+5. Compile, build, flash and run *or* jump ahead to **Step 2: Bluetooth**
+
+### Step 2: Bluetooth
+
+In this step Bluetooth functionality is added to the application:
+
+1. From the `.slcp` project file, **Configuration Tools** tab:
+   1. Find **Bluetooth GATT Configurator** and click the **Open** button
+2. From the **Bluetooth GATT Configurator**:
+   1. Click the **Import** ![](image/gatt_import.png) button
+   2. Select `Step_2_Bluetooth/gatt_configuration.btconf` (downloaded from Github) into project folder
+   3. Save the GATT configuration file
+3. Copy `Step_2_Bluetooth/app.c` (downloaded from Github) into project folder
+4. Compile, build, flash and run
+5. To connect from a Bluetooth app, including **EFR Connect**, look for a device named **Heart Monitor**
 
 ## References
 
 * https://www.bluetooth.com/specifications/specs/heart-rate-profile-1-0/
 * https://www.bluetooth.com/specifications/specs/heart-rate-service-1-0/
-* https://www.bluetooth.com/specifications/assigned-numbers/ GATT Specification Supplement for Characteristic values (Body Sensor Location)
+* https://www.bluetooth.com/specifications/assigned-numbers/ **GATT Specification Supplement** provides details of all standard Bluetooth Characteristics
 
-# SoC - Empty
+# Bluetooth - SoC Empty
+
+*This **Bluetooth - SoC Heart Monitor** project is based upon the **Bluetooth - SoC Empty** example, below is the readme for the **Bluetooth - SoC Empty** example:*
 
 The Bluetooth SoC-Empty example is a project that you can use as a template for any standalone Bluetooth application.
 
