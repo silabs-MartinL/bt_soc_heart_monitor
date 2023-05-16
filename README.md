@@ -144,7 +144,7 @@ As described above, an empty example does nothing except advertising and letting
 1. Build and flash the SoC-Empty example to your device.
 2. Make sure a bootloader is installed. See the Troubleshooting section.
 3. Download the **EFR Connect** smartphone app, available on [iOS](https://apps.apple.com/us/app/efr-connect/id1030932759) and [Android](https://play.google.com/store/apps/details?id=com.siliconlabs.bledemo).
-4. Open the app and choose the Bluetooth Browser. 
+4. Open the app and choose the Bluetooth Browser x. 
    ![EFR Connect start screen](Image/readme_img2.png)
 5. Now you should find your device advertising as "Empty Example". Tap **Connect** 
    ![Bluetooth Browser](Image/readme_img3.png)
