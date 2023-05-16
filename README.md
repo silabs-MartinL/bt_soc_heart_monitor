@@ -144,12 +144,13 @@ As described above, an empty example does nothing except advertising and letting
 1. Build and flash the SoC-Empty example to your device.
 2. Make sure a bootloader is installed. See the Troubleshooting section.
 3. Download the **EFR Connect** smartphone app, available on [iOS](https://apps.apple.com/us/app/efr-connect/id1030932759) and [Android](https://play.google.com/store/apps/details?id=com.siliconlabs.bledemo).
-4. Open the app and choose the Bluetooth Browser. 
-   ![EFR Connect start screen](Image/readme_img2.png)
-5. Now you should find your device advertising as "Empty Example". Tap **Connect** 
-   ![Bluetooth Browser](Image/readme_img3.png)
-6. The connection is opened, and the GATT database is automatically discovered. Find the device name characteristic under Generic Access service and try to read out the device name. 
-   ![GATT database of the device](Image/readme_img4.png)
+4. Open the app and choose the Bluetooth Browser.  
+   ![EFR Connect start screen](Image/readme_img2.png)  
+5. Now you should find your device advertising as "Empty Example". Tap **Connect**  
+   ![Bluetooth Browser](Image/readme_img3.png)  
+6. The connection is opened, and the GATT database is automatically discovered. Find the device name characteristic under Generic Access service and try to read out the device name.  
+   ![GATT database of the device](Image/readme_img4.png)  
+   
 
 ## Troubleshooting
 
