@@ -65,7 +65,7 @@ In this step the sensor hardware is set up without any wireless communications:
    9. Search `rgb`, select **Platform > Driver > LED > Simple RGB PWM LED**, click **Install** button, accept default `rgb_led0` instance
 
 4. Copy `Step_1_Sensor/app.c` (downloaded from Github) into project folder
-5. Compile, build, flash and run *or* jump ahead to **Step 2: Bluetooth**
+5. Compile, build, flash and run
 
 ### Step 2: Bluetooth
 
@@ -78,8 +78,22 @@ In this step Bluetooth functionality is added to the application:
    2. Select `Step_2_Bluetooth/gatt_configuration.btconf` (downloaded from Github) into project folder
    3. Save the GATT configuration file
 3. Copy `Step_2_Bluetooth/app.c` (downloaded from Github) into project folder
+4. Compile, build, flash and run 
+5. To connect from the **EFR Connect** mobile application, look for a device named **Heart Monitor**, expand the **Heart Rate** service, click the **Notify** below the **Heart Rate Measurement** characteristic to receive updates from the heart monitor over Bluetooth
+
+### Step 3: Bluetooth Control
+
+In this step a custom characteristic is added to allow the Heart Monitor configuration to be altered over Bluetooth:
+
+1. From the `.slcp` project file, **Configuration Tools** tab:
+   1. Find **Bluetooth GATT Configurator** and click the **Open** button
+2. From the **Bluetooth GATT Configurator**:
+   1. Click the **Import** ![](Image/gatt_import.png) button
+   2. Select `Step_3_Bluetooth_Control/gatt_configuration.btconf` (downloaded from Github) into project folder
+   3. Save the GATT configuration file
+3. Copy `Step_3_Bluetooth_Control/app.c` (downloaded from Github) into project folder
 4. Compile, build, flash and run
-5. To connect from a Bluetooth app, including **EFR Connect**, look for a device named **Heart Monitor**
+5. In **EFR Connect**, the configuration of the sensor can be changed by writing a hex value to the characteristic named **Unknown Characteristic**, the most significant nibble is the pulse width index and the least significant nibble is the sample rate index
 
 ## References
 
